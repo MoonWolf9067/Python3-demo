@@ -1,0 +1,43 @@
+# list是一种有序的集合，可随时添加和删除其中的变量
+# 对于list，从前往后的索引开始是 0 ，从后往前的索引开始是 -1
+# 利用索引可以获取 list 里面的值
+
+classmates = ['a', 'b', 'c']
+# append() 在 list尾部添加元素
+classmates.append('d')              # classmates = ['a', 'b', 'c', 'd']
+
+# insert() 利用索引把元素添加到指定的位置
+classmates.insert(1, 'e')           # classmates = ['a', 'e', 'b', 'c', 'd']
+
+# pop() 删除 list 末尾的元素
+classmates.pop()                    # classmates = ['a', 'e', 'b', 'c']
+
+# pop(i) 删除指定索引位置的元素
+classmates.pop(1)                   # classmates = ['a', 'b', 'c']
+
+# list 里面的元素的数据类型可以不同
+L = ['Apple', 123, True]
+
+# list 元素也可以是另一个list
+s = ['a', 'b', ['c', 'f'], 'h']     # len(s)=4   
+
+q = ['a', 'b']
+s = ['c', q, 'd']                   #要拿到 ‘b’ 的值可以通过 q[1] 或者 s[1][1]
+
+
+
+tuple
+# tuple初始化后就不能修改  在这里的不变指的是 tuple的每个元素的指向不变
+# tupole 的元素在定义的时候就必须被确定下来
+
+#定义空的 tuple
+t = ()                              
+
+#定义只有一个元素的元组
+t = (1,)                             #不能写成 t = (1)的形式， 该种形式只表示数学中的小括号
+
+
+
+
+
+
