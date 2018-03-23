@@ -1,0 +1,19 @@
+# python 的循环有两种
+# for...in 循环
+sum = 0
+for x in [1, 2, 3, 4, 5]:
+    sum = sum + x
+print(sum)
+
+# range(5) 对应是 0 ～ 4
+list(range(5))                               # [0, 1, 2, 3, 4]
+
+# continue 跳过本次循环，开始下一次循环
+n = 0
+while n < 10:
+    n = n + 1
+    if n % 2 == 0:
+        continue
+    print(n)
+    
+    
