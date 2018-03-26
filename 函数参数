@@ -1,0 +1,158 @@
+# 求解 x 的 n 次方
+def power(x, n):
+    s =1
+    while n > 0:
+        n = n - 1
+        s = s * x
+    return s
+    
+#默认参数
+def power(x, n=2):
+    s = 1
+    while n > 0:
+        n = n -1
+        s = s * n
+    return s
+power(5）        # 25
+power(5, 2)     # 25
+
+#当 n > 2的时候，就必须明确的传入 n， 如 power(5, 3)
+# 设置默认参数时， 必须注意以下几点
+# 必选参数在前， 默认参数在后，
+# 当函数有多个参数时， 把变化大的参数放在前面， 变化小的参数放在后面。 变化小的参数可以作为默认参数
+
+def enroll(name, gender):
+    print('name:', name)
+    print('gender:', gender)
+    
+enroll('Sarah', 'F')        # name: Sarah     gender: F
+
+#继续传入参数
+def enroll(name, gender, age=6, city='BJ'):
+    print('name:', name)
+    print('gender:', gender)
+    print('age:', age)
+    print('city:', city)
+    
+#默认参数相符
+enroll('Sarah', 'F')        # name: Sarah   gender: F   age: 6    city: BJ
+#默认参数不相符时需要提供额外的信息
+# 按顺序提供默认参数时
+enroll('Bob', 'M', 7)
+# 不按顺序提供默认参数时需要把参数名给写上
+enroll('Adam', 'M', city='BJ')
+
+# 默认参数的坑
+def add_end(L=[]):
+    L.append('END')
+    return L
+
+add_end([1, 2, 3])              # [1, 2, 3, 'END']
+
+# 使用默认参数调用
+add_end()                       # ['END']
+# 再次使用默认参数调用
+add_end()                       # ['END', 'END']
+add_end()                       # ['END', 'END', 'END']
+# 解释： 在函数定义的时候， 默认参数 L 的值就被计算出来了， 即 [] 。默认参数 L 也是一个变量， 它指向对象 []， 
+# 每次调用该函数，如果改变了 L 的内容，则下次调用时，默认参数的内容就变了，不再是函数定义时的 []。
+
+#定义默认参数时，默认参数必须指向不变的对象
+# 修改上面的例子
+def add_end(L=None):
+    if L is None:
+        L = []
+     L.append('END')
+     return L
+     
+# 可变参数
+# 给定一组数字，求其平方和
+def calc(numbers):
+    sum = 0
+    for n in numbers:
+        sum = sum + n * n
+    return sum
+# 在调用上诉函数的时候，需要先组装出一个list 或tuple
+# 组装出list
+calc([1, 2, 3])                 # 14
+# 组装出tuple
+calc((1, 3, 5, 7))              # 84
+
+# 把上诉的函数参数改变为可变参数
+def calc(*numbers):
+    sum = 0
+    for n in numbers:
+        sum = sum + n * n
+    return sum
+    
+calc(1, 2)              # 5
+calc()                  # 0
+
+# 可以在list或者tuple前面加一个 * 号，把list或者tuple的元素变成可变参数给传进去
+nums = [1, 2, 3]
+calc(*nums)                     # 14
+
+#关键字参数
+# 可变参数允许传入0个或者任意个参数，这些可变参数在函数调用时自动组装为一个tuple。 
+# 而关键字参数允许传入0个或者任意个含参数名的参数，这些关键字参数在函数内部自动组装为一个dict
+def person(name, age, **kw):
+    print('name:', name, 'age:', age, 'other:', kw)
+
+# 只传入必选参数
+person('Michael', 30)                     # name: Michael age: 30  other: {}
+# 传入任意个数的关键字参数
+person('Bob', 30, city='BJ')              # name: Bob   age: 35    other: {'city': 'BJ'}
+person('Adam', 45, gender='W', job='EN')  # name: Adam  age: 45    other: {'gender': 'W', 'job': EN}
+
+# 和可变参数类似， 可以先组装出一个dict，然后把该dict转换为关键字参数传进去
+# **extra 表示把extra这个dict的所有key-value用关键字参数传入到函数的**kw参数， kw将获得一个dict,注意kw获得的dict是extra的一份拷贝
+# 对kw的改动不会影响到函数外的extra
+extra = {'city': 'BJ', 'job': EN}
+person('Jack', 24, **extra)
+
+# 命名关键字参数
+# 若果要限制关键字参数的名字，就可以用命名关键字参数
+# 和关键字参数**kv不同，命名关键字参数需要一个特殊的分隔符*，*后面的参数视为命名关键字参数
+def person(name, age, *, city, job):
+    print(name, age, city, job)
+    
+person('Jack', 24, city='BJ', job='EN')
+
+# 使用命名关键字参数时，如果没有可变参数，就必须加一个 * 作为分隔符
+# 否则，python解释器将无法识别位置参数和命名关键字参数
+# 如果函数定义中已经有了一个可变参数，后面跟着的命名关键字参数就不再需要一个特殊的分隔符 *
+def person(name, age, *args, city, job):
+    print(name, age, args, city, job)
+    
+# 参数组合
+# 参数定义的顺序必须是： 必选参数， 默认参数， 可变参数， 命名关键字参数， 关键字参数
+def f1(a, b, c, *args, **kw):
+    print('a:',a, 'b:',b, 'c:',c, 'args:',args, 'kw:',kw)
+    
+def f2(a, b, c=0, *, d, **kw):
+    print('a:',a, 'b:',b, 'c:',c, 'd:',d, 'kw:',kw)
+    
+f1(1, 2)                               # a:1 b:2 c:0 args:() kW:{}
+f1(1, 2, c=3)                          # a:1 b:2 c:3 args:() kW:{}
+f1(1, 2, 3, 'a', 'b')                  # a:1 b:2 c:3 args:('a', 'b') kw:{}
+f1(1, 2, 3, 'a', 'b', x=99)            # a:1 b:2 c:3 args:('a', 'b') kw:{'x': 99}
+f2(1, 2, d=99, ext=None)               # a:1 b:2 c:0 d:99 kw:{'x':None}
+
+#通过一个tuple和dict也能调用上诉的函数
+args = (1, 2, 3, 4)
+kw = {'d':99, 'x':'#'}
+f1(*args, **kw)                        # a:1 b:2 c:3 args:(4,) kw:{'d':99, 'x':'#'}
+
+args = (1, 2, 3)
+kw = {'d':88, 'x':‘#’}
+f2(*args, **kw)                       # a:1 b:2 c:3 d:88 kw:{'x':'#'}
+
+# 定义一个函数使其能接收一个或者多个参数，并计算其值
+def product(*numbers):
+    s = 1
+    for i in numbers:
+        s = s * i
+    return s
+    
+
+     
