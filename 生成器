@@ -1,0 +1,96 @@
+# 通过列表生成式，我们可以直接创建一个列表。但是受到内存的限制，列表容量肯定是有限的
+# 如果创建一个包含很多个元素的列表，不仅占用了很大的存储空间，当我们仅仅访问前几个元素时，后面的绝大多数元素占用的空间就浪费掉了
+# 如果列表元素可以按照某种算法推算出来，那我们利用生成器可以在循环的过程中不断推算出后续的元素
+
+# 创建一个generator 有很多种方法
+# 方法一 ： 把一个列表生成式的 [] 改为 ()
+L = [x * x for x in range(10)]
+g = (x * x for x in range(10))                         # <generator object <genexpr> at 0x1022ef630>
+
+# 可以通过 next() 函数获得 generator 的下一个值
+# 每次调用 next() 就计算出 g 的下一个元素，直到计算到最后一个元素，当没有更多的元素时，抛出异常 StopIteration 的错误
+
+# 获取 g 的元素的正确方法， 通过 for 循环
+g = (x * x for x in range(10))
+for n in g:
+    print(n)
+    
+# 当推算的算法比较复杂的时候， 用类似列表生成式 for 循环无法解决。 此时可以用函数来实现
+# 如 斐波那契数列   1, 1, 2, 3, 5, 8, 13, 21, 34, ...
+
+# 函数实现
+def fib(max):
+    n, a, b = 0, 0, 1
+    while n < max:
+        print(b)
+        a, b = b, a + b
+        n = n + 1
+    return 'done'
+
+# 生成器实现
+# 把上诉函数 print(b) 改为 yield b 即可
+def fib(max):
+    n, a, b = 0, 0, 1
+    while n < max:
+        yield b
+        a, b = b, a + b
+        n = n + 1
+    return 'done'
+    
+# 如果一个函数中有 yield 关键字， 那么这个函数就不再是一个普通函数， 而是一个 generator
+# generator 和函数的执行流程不一样， 函数是顺序执行，遇到 return 语句或者最后一行函数语句就返回。 
+# 而变成 generator 的函数， 在每次调用 next() 的时候执行， 遇到 yield 语句返回， 再次执行时从上次返回的yield语句处继续执行
+def odd():
+    print('step 1')
+    yield 1
+    print('step 2')
+    yield 2
+    print('step 3')
+    yield 3
+    
+# 调用该generator时， 首先要生成一个 generator 对象， 然后用next() 函数不断获得下一个返回值
+o = odd()
+next(o)                 # step 1, 1
+next(o)                 # step 2, 2
+# 当没有 yield 可以执行时，再次调用next(o) 就会报错
+
+# 使用 for 循环调用generator时， 拿不到 generator 的return语句的返回值。 如果想要拿到返回值， 就必须捕获 StopIteration 错误
+# 返回值包含在 StopIteration 的 value 中
+g = fib(6)
+while True:
+    try:
+        x = next(g)
+        print('g:', x)
+    except StopIteration as e:
+        print('Generator return value:', e.value)
+        break
+        
+# 输出杨辉三角
+def triangles(max):
+
+    b = [1]
+    n = 0
+    while n < max:
+        c = [0] + b
+        a = b + [0]
+        b = [a[i] + c[i] for i in range(len(c))]
+        n = n + 1
+    return 'done'
+
+# 改变 max的值就能输出相应的三角
+t = triangles(max)
+while True:
+    try:
+        T = next(t)
+        print(T)
+    except StopIteration as e:
+        print('Generator return value:', e.value)
+        break
+        
+# generator 是在 for 循环的过程中不断计算出下一个元素， 并在适当的条件结束 for 循环，
+# 对于函数改成的 generator 来说， 遇到 return 语句或者执行到函数最后一行时， 结束 generator 的指令， for 循环随之结束
+
+# generator 函数的‘调用’实际返回一个 generator 对象
+        
+ 
+  
