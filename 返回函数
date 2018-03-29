@@ -1,0 +1,77 @@
+# 返回函数
+# 把函数作为结果值返回
+def lazy_sum(*args):
+    def sum():
+        ax = 0
+        for n in args:
+            ax = ax + n
+        return ax
+    return sum
+    
+f = lazy_sum(1, 3, 5, 7, 9)
+f                # 返回的是求和函数　　而不是结果
+f()              # 25 返回结果
+
+# 当lazy_sum　返回函数 sum 时，相关参数和变量都保存在返回的函数中，这种结构称为闭包
+# 当调用lazy_sum() 函数时，每次调用都会返回一个新的参数，即使传入相同的参数
+ f1 = lazy_sum(1, 3, 5, 7, 9)
+ f2 = lazy_sum(1, 3, 5, 7, 9)
+ f1 == f2          # False
+ 
+ # 返回的函数直到调用 f() 才执行
+ def count():
+     fs = []
+     for i in range(1, 4):
+         def f():
+             return i*i
+         fs.append(f)
+     return fs
+     
+f1, f2, f3 = count()
+f1()                 # 9
+f2()                 # 9
+f3()                 # 9
+#　在上述的程序中每次循环都创建了一个新的函数，然后把创建的３个函数都返回了
+#  返回的函数都引用了变量 i　，但它并非立刻执行。等到３个函数都返回时，它们所引用的变量　i 已经变成了　３
+
+# 如要引用循环变量，那么就再创建一个函数，　用该函数的参数绑定循环变量当前的值
+# 无论该循环变量后续如何更改，已绑定到函数参数的值不变
+def count():
+    def f(j):
+        def g():
+            return j * j
+        return g
+    fs = []
+    for i in range(1, 4):
+        fs.append(f(i))           # f(i) 立刻被执行，i 的当前值被传入 f()
+    return fs
+    
+ # 利用闭包返回一个计数器函数，每次调用它返回递增函数
+ # 较佳的方法
+ def createCounter():
+     L = []
+     def counter():
+         L.append(1)
+         return sum(L)
+     return counter
+ cC = createCounter()
+ cC()
+ cC()
+ 
+ # 另外一种方法
+ # 内部函数一般无法修改外部函数的参数
+ # 想要修改需要声明nonlocal
+ # 内部函数可以修改外部 list　中的元素
+ # 内部函数的str类型变量则不能修改，除非声明为 nonelocal
+ def createCounter():
+     a = [0]
+     def counter():
+         a[0] = a[0] + 1
+         return a[0]
+     return counter
+     
+cC = createCounter()
+cC()
+cC()
+         
+         
