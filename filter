@@ -1,0 +1,55 @@
+# filter() 函数用于过滤序列
+# filter() 接收一个函数和一个序列，　filter() 把传入的函数依次作用于每个元素，然后根据返回值是 True　还是 False　决定保留还是丢弃该元素
+
+# 删掉偶数，　保留奇数
+def is_odd(n):
+    return n % 2 == 1
+# filter() 函数返回的是一个 Iterator ，是一个惰性序列，　可以用 list()　函数来获得所有结果并返回　list 
+list(filter(is_odd, [1, 2, 3, 4, 5, 6]))                # 1 3 5
+
+#　把序列中的空字符串删掉
+def not_empty(s):
+    return s and s.strip()
+    
+list(filter(not_empty, ['A', 'B', '', ' ']))
+
+# 用 filter　求素数
+# 构造从　３　开始的奇数序列
+def _odd_iter():
+    n = 1
+    while True:
+        n = n + 2
+        yield n
+        
+# 定义筛选函数
+def _not_divisible(n):
+    return lambda x: x % n > 0
+    
+# 定义一个生成器，不断的返回下一个素数
+def primes():
+    yield　２
+    it = _odd_iter()
+    while True:
+        n = next(it)
+        yield n
+        it = filter(_not_divisible(n), it)
+        
+# 设置退出循环的条件
+for n in primers():
+    if n < 1000:
+        print(n)
+    else:
+        break
+        
+# 回数是指从左向右读或者从右向左读都是一样的数
+# 较佳思路，　利用字符串的翻转
+def is_palindrome(n):
+    s = str(n)
+    if s == s[::-1]:              
+        return True
+output = list(filter(is_palindrome, range(1, 100)))
+print(output)
+# list = [s:e:L]  
+# s　代表开始索引值，　e 代表结束索引值的前一位，　Ｌ代表步进值
+# 当步进值为负数时，　s 默认为　-1, e　默认为 -len(list)-1, 
+# s[::-1]　代表按照步进值为１，　从最后一位到第一位完整复制一遍
