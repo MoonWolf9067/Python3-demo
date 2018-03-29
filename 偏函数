@@ -1,0 +1,15 @@
+int('12345', base=8)        # 5349
+int('12345', base=16)       # 74565
+
+# 转换大量的二进制参数
+def int2(x, base=2):
+    return int(x, base)
+    
+int2('1000000')        # 64
+
+# functools.partial 帮助创建偏函数
+import functools
+int2 = functools.partial(int, base=2)
+int2('1000000')     # 64
+
+# 创建偏函数时，可以接收函数对象，　*args, **kv　三个参数
