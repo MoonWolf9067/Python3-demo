@@ -1,0 +1,27 @@
+# 用 sorted 来进行排序
+sorted([36, 5, -12, 8, -21])
+
+# sorted 函数可以接收一个 key 函数来实现自定义排序
+# key 指定的函数将作用于 list　的每一个元素上，并根据 key 返回的结果进行排序
+sorted([36, 5, -12, 9, -21], key=abs)     # [5, 9, -12, -21, 36]
+
+# 对字符串进行排序
+# 默认情况下是按照ASCII的大小来进行排序
+# 对字符串进行忽视大小写，按字母排序
+sorted(['bob', 'about', 'Zoo', 'Credit'], key=str.lower)
+
+# 进行反向排序时加入　第三个参数 reverse
+sorted(['bob', 'about', 'Zoo', 'Credit'], key=str.lower, reverse=True)
+
+# 分别用sorted() 函数对列表中的名字和分数进行排序
+L = [('Bob', 75), ('Adam', 92), ('Bart', 66), ('Lisa', 88)]
+def by_name(t):
+    return t[0].lower()
+    
+def by_score(t):
+    return t[1]
+    
+L2 = sorted(L, key=by_name)
+L1 = sorted(L, key=by_score)
+print(L2)
+print(L1)
