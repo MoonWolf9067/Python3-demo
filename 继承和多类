@@ -1,0 +1,38 @@
+# 继承使得子类获得了父类的全部功能
+class Animal(object):
+    def run(self):
+        print('Animal is running...')
+        
+class Dog(Animal):
+    pass
+    
+class Cat(Animal):
+    pass
+    
+
+dog = Dog()
+dog.run()
+cat = Cat()
+cat.run()
+
+# 当子类和父类存在相同的方法时，总是会调用子类的方法，此时子类的方法覆盖了父类的方法
+class Dog(Animal):
+    def run(self):
+        print('Dog is running...')
+        
+    def eat(self):
+        print('Eating meat...')
+        
+# 对于静态语言，如果需要传入某一类型，则传入的对象必须是相应的类型或者它的子类
+# 对于动态语言，则不一定要传入相应的类型，只要传入的对象有相应的方法即可
+def run_twice(animal):
+    animal.run()
+    animal.run()
+    
+run_twice(Animal())
+run_twice(Dog())
+run_twice(Cat())
+
+class Tortoise(Animal):
+    def run(self):
+            print('Tortoise is running slowly...')
