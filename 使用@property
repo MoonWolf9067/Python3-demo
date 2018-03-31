@@ -1,0 +1,58 @@
+# 在绑定属性时，如果直接把属性暴露出去，虽然写起来简单，但是没办法检查参数，导致可以把成绩随便改
+s = Student()
+s.score = 9999
+
+# 为了限制　score的范围，　可以通过 set_score() 方法来设置成绩，　再通过一个 get_score() 来获取成绩，这样，在 set_score()　方法里就可以检查参数
+class Student(object):
+    def get_score(self):
+        return self._score
+        
+    def set_score(self, value):
+        if not isinstance(value, int):
+            raise ValueError('score must be an integer!')
+        if value < 0 or value > 100:
+            raise ValueError('score must between 0 ~ 100!')
+        self._score = value
+        
+# 既能检查参数，又能用类似属性的简单方式来访问类的变量
+# 装饰器可以给函数动态加上功能，对于类的方法，装饰器一样起作用
+# python 内置的 @property　装饰器就是负责把一个方法变成属性调用
+
+class Student(object):
+    @property
+    def score(self):
+        return self._score
+        
+    @score.setter
+    def score(self, value):
+        if not isinstance(value, int)
+            raise ValueError('score must be an integer')
+        if value < 0 or value > 100:
+            raise ValueError('score must between 0~100')
+        self._score = value
+        
+# 如何使用　＠property 。把一个　getter 方法方法变成属性，只需要加上 @property　就可以。
+# 此时，　@property　本身又创建了另一个装饰器 @score.setter,　负责把一个 setter　方法变成属性赋值
+# 于是就有了一个可控的属性操作
+s = Student()
+# 实际转化为 s.set_score(60)
+s.score = 60
+# 实际转化为 s.get_score()
+s.score                 # 60
+s.score = 9999          # 超出范围，报错
+
+# 对于　@property 我们在对实例属性操作的时候，就知道该属性很可能不是直接暴露的，而是通过 getter 和 setter　方法来实现的
+# 还可以定义只读属性，　只定义 getter　方法，　不定义setter 方法就是一个只读属性
+class Student(object):
+    
+    @property
+    def birth(self):
+        return self._birth
+        
+    @birth.setter
+    def birth(self, value):
+        self._birth = value
+        
+    @property
+    def age(self):
+        return 2015 - self._birth
